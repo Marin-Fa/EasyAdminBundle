@@ -4,6 +4,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -12,14 +17,22 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        yield IdField::new('id')
+            ->onlyOnIndex();
+        // calls the methods getFullName in the user entity even if we don't have this attribute from User, using the PropertyAccess Component from Symfony
+        yield TextField::new('fullName')
+            ->hideOnForm();
+        yield TextField::new('firstName')
+        ->onlyOnForms();
+        yield TextField::new('lastName')
+        ->onlyOnForms();
+        yield EmailField::new('email');
+        yield BooleanField::new('enabled')
+            ->renderAsSwitch(false);
+        yield DateField::new('createdAt')
+        ->hideOnForm();
     }
-    */
+
 }
